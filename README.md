@@ -1,4 +1,5 @@
-# uv-app
+# whatstheuv.com | Weather / UV APP
+![Image](https://i.ibb.co/bBXBbT4/uv-index.jpg)
 
 ## Project setup
 ```
