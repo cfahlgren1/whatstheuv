@@ -8,13 +8,13 @@
             Sunrise & Sunset
         </v-card-title>
         <div class="text-center ma-2">
-            <v-card-subtitle class="display-2">
+            <v-card-subtitle class="display-1">
                 <v-icon x-large left :color="color">mdi-arrow-up-circle</v-icon>
-                {{sunrise}}
+                <b>{{sunrise}}</b>
             </v-card-subtitle>
-            <v-card-subtitle class="display-2">
+            <v-card-subtitle class="display-1">
                 <v-icon x-large left :color="color">mdi-arrow-down-circle</v-icon>
-                {{sunset}}
+                <b>{{sunset}}</b>
             </v-card-subtitle>
         </div>
     </v-card>

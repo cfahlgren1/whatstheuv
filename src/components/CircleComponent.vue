@@ -18,27 +18,26 @@
                         :color="circle_color"
                 >
                     <div v-if="!isNight()" class="display-2">{{ uv }}</div>
-                    <div v-else><v-icon x-large>mdi-weather-night</v-icon></div>
+                    <div v-else><v-icon :size="60">mdi-weather-night</v-icon></div>
                 </v-progress-circular>
             </div>
             <v-chip
                     class="ma-2"
-                    color="gray"
-                    text-color="black"
+                    color="blue"
+                    text-color="white"
             >
                 <v-icon left>mdi-white-balance-sunny</v-icon>
-                {{uv_max}}
+                Max: {{uv_max}}
             </v-chip>
             <v-chip
                     class="ma-2"
-                    color="gray"
-                    text-color="black"
+                    color="blue"
+                    text-color="white"
             >
                 <v-icon left>mdi-clock-outline</v-icon>
                 {{max_uv_time}}
             </v-chip>
         </v-card>
-
     </div>
 </template>
 
@@ -66,8 +65,8 @@
         },
         components: {},
         props: {
-            lng: Number,
-            lat: Number,
+            sunset: Number,
+            sunrise: Number,
         },
         methods :
             {
@@ -81,18 +80,43 @@
                         this.info = response.data.result;
                         this.uv = parseFloat(response.data.result['uv'].toFixed(1));
                         this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
-                        this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US');
+                        this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
                     });
+                    console.log(this.lat);
+                    console.log(this.lng);
                 },
                 isNight(){
                     var d = new Date(Date.now());
-                    console.log(d);
+                    var sunset_time = new Date(this.sunset * 1000);
+                    var sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
+                    if (d >=  sunset_time | d <= sunrise_time){
+                        this.circle_color = "#5D5D5A";
+                        this.uv = this.uv_max;
+                        return true;
+                    }
+                    this.circle_color = '#ffa45c';
                     return false;
                 },
-
             },
         mounted() {
             this.updateUV()
+        },
+        computed: {
+            lng : function(){
+                return this.$store.state.lng;
+            },
+            lat: function(){
+                return this.$store.state.lat;
+            },
+        },
+        watch: {
+            lng(newValue, oldValue){
+                console.log('Updating from ' + oldValue + ' to ' + newValue);
+            },
+            lat(newValue, oldValue){
+                console.log('Updating from ' + oldValue + ' to ' + newValue);
+                this.updateUV();
+            }
         },
     }
 </script>

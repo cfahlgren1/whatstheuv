@@ -9,12 +9,12 @@
         </v-card-title>
         <br>
             <v-card-subtitle class="display-2">
-                {{speed}}  m/s
+                <b>{{speed}}</b>  mph
             </v-card-subtitle>
-            <v-card-subtitle class="heading ma-3" align="left">
+            <v-card-title class="heading ma-3" align="left">
                 <v-icon x-medium left :color="color">mdi-compass</v-icon>
                 {{getCardinal(angle)}}
-            </v-card-subtitle>
+            </v-card-title>
     </v-card>
 </template>
 
@@ -56,7 +56,5 @@
         }
     }
 </script>
-
 <style scoped>
-
 </style>

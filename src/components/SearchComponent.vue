@@ -48,8 +48,6 @@
             }
         },
         props:{
-            lat : Number,
-            lng : Number,
         },
         methods: {
             getGeocode(searchText){
@@ -59,8 +57,22 @@
                         this.geocodeResults = response.data.features
                     });
                 }
-            }},
-        mounted() {},
+            },
+            setLng(lng){
+                this.$store.commit('set_lng', lng);
+            },
+            setLat(lat){
+                this.$store.commit('set_lat', lat);
+            },
+        },
+        computed: {
+            lng : function(){
+                return this.$store.state.lng;
+            },
+            lat: function(){
+                return this.$store.state.lat;
+            },
+        }
     }
 </script>
 
