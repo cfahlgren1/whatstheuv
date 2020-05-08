@@ -4,30 +4,33 @@
       <SearchComponent/>
       <h1 class="display-3 has-text-centered location-header">Hilliard, FL</h1>
       <br>
-      <h1 class="display-4 has-text-centered"><b>{{current_temp}}°F</b></h1>
-      <h1 class="display-1 has-text-centered has-text-grey-light"><b>"{{forecast}}"</b></h1>
+        <h1 v-animate-css="'bounceInUp'" class="display-4 has-text-centered"><b>{{current_temp}}°F</b></h1>
+        <h1 class="display-1 has-text-centered has-text-grey-light"><b>"{{forecast}}"</b></h1>
       <v-container fluid>
-          <v-row>
-            <v-col cols="60" align="center">
-            <div class="ma-6">
-              <CircleComponent
-              :sunrise="sunrise_time"
-              :sunset="sunset_time"/>
-            </div>
-            </v-col>
-            <v-col cols="60" align="center">
-            <div class="ma-6">
-              <SunriseComponent
-                :sunset="sunset"
-                :sunrise="sunrise"/>
-            </div>
+        <sequential-entrance fromTop>
+
+        <v-row>
+              <v-col cols="60" align="center">
               <div class="ma-6">
-                <WindComponent
-                  :speed="wind_speed"
-                  :angle="wind_angle"/>
+                <CircleComponent
+                :sunrise="sunrise_time"
+                :sunset="sunset_time"/>
               </div>
-            </v-col>
+              </v-col>
+              <v-col cols="60" align="center">
+              <div class="ma-6">
+                <SunriseComponent
+                  :sunset="sunset"
+                  :sunrise="sunrise"/>
+              </div>
+                <div class="ma-6">
+                  <WindComponent
+                    :speed="wind_speed"
+                    :angle="wind_angle"/>
+                </div>
+              </v-col>
           </v-row>
+        </sequential-entrance>
       </v-container>
       <h1>{{info}}</h1>
     </v-content>
@@ -45,7 +48,9 @@
   import SearchComponent from "./components/SearchComponent";
   import SunriseComponent from "./components/SunriseComponent";
   import WindComponent from "./components/WindComponent";
+  import VAnimateCss from 'v-animate-css';
 
+  Vue.use(VAnimateCss);
   Vue.use(Buefy)
   Vue.use(VueAxios, axios)
   Vue.use(VueGeolocation);

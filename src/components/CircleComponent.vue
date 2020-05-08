@@ -46,7 +46,10 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import SequentialEntrance from 'vue-sequential-entrance'
+    import 'vue-sequential-entrance/vue-sequential-entrance.css'
 
+    Vue.use(SequentialEntrance);
     Vue.use(VueAxios, axios)
     Vue.use(VueGeolocation);
 
@@ -82,8 +85,6 @@
                         this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
                         this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
                     });
-                    console.log(this.lat);
-                    console.log(this.lng);
                 },
                 isNight(){
                     var d = new Date(Date.now());
