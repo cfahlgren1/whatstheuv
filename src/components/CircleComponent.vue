@@ -14,6 +14,7 @@
                     elevation="0"
                     max-width="calc(100% - 32px)"
             >
+                <h1 style="margin-bottom: 1em; font-weight: bold;">Forecast</h1>
                 <v-sparkline
                         :value="data"
                         :labels="labels"
@@ -26,8 +27,8 @@
                         smooth
                 ></v-sparkline>
             </v-sheet>
-
             <div justify="center" align="center" class="text-center ma-12">
+                <h1 style="margin-bottom: 1em; font-weight: bold;">Current</h1>
                 <v-progress-circular
                         :indeterminate="indeterminate"
                         :rotate="0"
@@ -159,8 +160,6 @@
                                 }
                                 skip = !skip;
                             });
-                            console.log(this.data);
-                            console.log(this.labels);
                         });
                     }
                 },

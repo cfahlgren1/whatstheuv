@@ -4,7 +4,7 @@
       <SearchComponent/>
       <h1 class="display-3 has-text-centered location-header">{{location}}</h1>
       <br>
-        <h1 v-animate-css="'bounceInUp'" class="display-4 has-text-centered"><b>{{current_temp}}°F</b></h1>
+      <h1 v-animate-css="'bounceInUp'" class="display-4 has-text-centered"><b>{{current_temp}}°F</b></h1>
         <h1 class="display-1 has-text-centered has-text-grey-light"><b>"{{forecast}}"</b></h1>
       <br>
       <v-container fluid>
@@ -112,6 +112,7 @@
                     this.wind_angle = response.data.current.wind_deg;
                     this.forecast = response.data.current.weather[0].description;
                     this.current_temp = response.data.current.temp.toFixed(0);
+                    console.log(response.data);
                   });
                 }
               }
