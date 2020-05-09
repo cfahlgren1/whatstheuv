@@ -43,11 +43,11 @@
 
 <script>
     import VueGeolocation from 'vue-browser-geolocation';
-    import Vue from 'vue'
-    import axios from 'axios'
-    import VueAxios from 'vue-axios'
-    import SequentialEntrance from 'vue-sequential-entrance'
-    import 'vue-sequential-entrance/vue-sequential-entrance.css'
+    import Vue from 'vue';
+    import axios from 'axios';
+    import VueAxios from 'vue-axios';
+    import SequentialEntrance from 'vue-sequential-entrance';
+    import 'vue-sequential-entrance/vue-sequential-entrance.css';
 
     Vue.use(SequentialEntrance);
     Vue.use(VueAxios, axios)
@@ -74,17 +74,20 @@
         methods :
             {
                 updateUV() {
-                    var d = new Date(Date.now());
-                    var n = d.toISOString();
-                    axios.get('https://api.openuv.io/api/v1/uv?lat=' + this.lat + '&lng=' + this.lng + '&dt=' + n, {
-                        params: {},
-                        headers: {'x-access-token': '65d941e9fdd0669b2f79c535acbf933b'}
-                    }).then(response => {
-                        this.info = response.data.result;
-                        this.uv = parseFloat(response.data.result['uv'].toFixed(1));
-                        this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
-                        this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
-                    });
+                    if (this.lat !== 0 && this.lng !== 0)
+                    {
+                        var d = new Date(Date.now());
+                        var n = d.toISOString();
+                        axios.get('https://api.openuv.io/api/v1/uv?lat=' + this.lat + '&lng=' + this.lng + '&dt=' + n, {
+                            params: {},
+                            headers: {'x-access-token': '65d941e9fdd0669b2f79c535acbf933b'}
+                        }).then(response => {
+                            this.info = response.data.result;
+                            this.uv = parseFloat(response.data.result['uv'].toFixed(1));
+                            this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
+                            this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
+                        });
+                    }
                 },
                 isNight(){
                     var d = new Date(Date.now());

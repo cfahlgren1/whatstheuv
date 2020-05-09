@@ -2,15 +2,16 @@
   <v-app>
     <v-content>
       <SearchComponent/>
-      <h1 class="display-3 has-text-centered location-header">Hilliard, FL</h1>
+      <h1 class="display-3 has-text-centered location-header">{{location}}</h1>
       <br>
         <h1 v-animate-css="'bounceInUp'" class="display-4 has-text-centered"><b>{{current_temp}}°F</b></h1>
         <h1 class="display-1 has-text-centered has-text-grey-light"><b>"{{forecast}}"</b></h1>
+      <br>
       <v-container fluid>
         <sequential-entrance fromTop>
-
-        <v-row>
-              <v-col cols="60" align="center">
+          <h1 class="forecast-header display-1 has-text-left">Today's Highlights</h1>
+          <v-row>
+            <v-col cols="60" align="center">
               <div class="ma-6">
                 <CircleComponent
                 :sunrise="sunrise_time"
@@ -32,7 +33,6 @@
           </v-row>
         </sequential-entrance>
       </v-container>
-      <h1>{{info}}</h1>
     </v-content>
   </v-app>
 </template>
@@ -98,20 +98,22 @@
               setLat(lat){
                 this.$store.commit('set_lat', lat);
               },
-              updateUV(){
-                axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + this.lat +'&lon=' + this.lng + '&exclude=hourly&appid=' + this.key + '&units=imperial', {
-                  params: {},
-                }).then(response => {
-                  this.info = response.data;
-                  this.sunrise_time = response.data.current.sunrise;
-                  this.sunrise = this.getLocalTime(this.sunrise_time);
-                  this.sunset_time = response.data.current.sunset;
-                  this.sunset = this.getLocalTime(this.sunset_time);
-                  this.wind_speed = response.data.current.wind_speed;
-                  this.wind_angle = response.data.current.wind_deg;
-                  this.forecast = response.data.current.weather[0].description;
-                  this.current_temp = response.data.current.temp.toFixed(0);
-                });
+              updateUV() {
+                if (this.lat !== 0 && this.lng !== 0) {
+                  axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + this.lat + '&lon=' + this.lng + '&exclude=hourly&appid=' + this.key + '&units=imperial', {
+                    params: {},
+                  }).then(response => {
+                    this.info = response.data;
+                    this.sunrise_time = response.data.current.sunrise;
+                    this.sunrise = this.getLocalTime(this.sunrise_time);
+                    this.sunset_time = response.data.current.sunset;
+                    this.sunset = this.getLocalTime(this.sunset_time);
+                    this.wind_speed = response.data.current.wind_speed;
+                    this.wind_angle = response.data.current.wind_deg;
+                    this.forecast = response.data.current.weather[0].description;
+                    this.current_temp = response.data.current.temp.toFixed(0);
+                  });
+                }
               }
             },
     computed: {
@@ -121,6 +123,14 @@
       lat: function(){
         return this.$store.state.lat;
       },
+      location: function(){
+        return this.$store.state.location;
+      }
+    },
+    watch:{
+      lng(){
+        this.updateUV();
+      }
     }
   }
 </script>
@@ -138,5 +148,10 @@
     background-color: #2D4059;
     padding: 1em;
     color: white;
+  }
+  .forecast-header
+  {
+    margin-left: 1em;
+    font-weight: bold;
   }
 </style>

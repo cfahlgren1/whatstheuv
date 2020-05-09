@@ -6,6 +6,7 @@ export const store = new Vuex.Store({
     state: {
         lng: 0,
         lat: 0,
+        location: '',
     },
     getters : {
         lng: (state) => {
@@ -14,6 +15,9 @@ export const store = new Vuex.Store({
         lat: (state) => {
             return state.lat
         },
+        location: (state) => {
+            return state.location
+        }
     },
     mutations: {
         set_lng : (state, newValue) => {
@@ -22,5 +26,8 @@ export const store = new Vuex.Store({
         set_lat : (state, newValue) => {
             state.lat = newValue
         },
+        set_location : (state, newValue) => {
+            state.location = newValue
+        }
     }
 })

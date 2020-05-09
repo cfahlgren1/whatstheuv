@@ -20,12 +20,28 @@
                 :opacity="1"
                 :value="overlay"
         >
-            <v-btn
-                    color="primary"
-                    @click="overlay = false"
-            >
-                Hide Overlay
+                <v-toolbar
+                        dark
+                        color="blue"
+                >
+            <v-toolbar-title>Location</v-toolbar-title>
+            <v-autocomplete
+                    v-model="select"
+                    :loading="loading"
+                    :items="locationResults"
+                    :search-input.sync="search"
+                    class="mx-8"
+                    filled
+                    flat
+                    hide-no-data
+                    hide-details
+                    label="Search a location..."
+                    solo-inverted
+            ></v-autocomplete>
+            <v-btn icon @click="overlay = false">
+                <v-icon>mdi-close-thick</v-icon>
             </v-btn>
+            </v-toolbar>
         </v-overlay>
     </div>
 </template>
@@ -39,23 +55,32 @@
     export default {
         name: "SearchComponent",
         data(){
-            return{
+            return {
                 overlay: false,
                 key: "pk.eyJ1IjoiY2ZhaGxncmVuMSIsImEiOiJjazdiZWtqaDEwMDhyM2xvNTJoZDFxcjFqIn0.Chg6D1kZntCd3Gt3d0HxpA",
-                geocodeResults : null,
-                message: "",
+                locationResults: [],
+                location: "",
                 hidden: false,
+                loading: false,
+                select: null,
+                search: null,
+                place_name: '',
+                geometry: null,
+                coordinates: [],
             }
         },
         props:{
         },
         methods: {
-            getGeocode(searchText){
-                if (searchText.message.length >= 6) {
-                    console.log(searchText.message);
-                    axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText.message + '.json?access_token=' + this.key + '&autocomplete=true&proximity=' + this.lng + '%2C' + this.lat, {}).then(response => {
-                        this.geocodeResults = response.data.features
+            querySelections (searchText) {
+                this.loading = true
+                if (searchText.length >= 6) {
+                    axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText + '.json?access_token=' + this.key + '&autocomplete=true&proximity=' + this.lng + '%2C' + this.lat + '&country=us', {}).then(response => {
+                        response.data.features.forEach(x => this.locationResults.push( {"text" : x.place_name, "value": {"lng": x.geometry.coordinates[0], "lat": x.geometry.coordinates[1], "name" : x.text}}));
+                        console.log(response.data.features);
                     });
+                    this.loading = false;
+
                 }
             },
             setLng(lng){
@@ -64,6 +89,21 @@
             setLat(lat){
                 this.$store.commit('set_lat', lat);
             },
+            setLocation(location){
+                this.$store.commit('set_location', location);
+                console.log('Location changed to ' + location);
+            },
+        },
+        watch: {
+            search (val) {
+                val && val !== this.select && this.querySelections(val);
+            },
+            select (){
+                this.setLng(this.select.lng);
+                this.setLat(this.select.lat);
+                this.setLocation(this.select.name);
+                this.overlay = !this.overlay;
+            }
         },
         computed: {
             lng : function(){
@@ -75,6 +115,5 @@
         }
     }
 </script>
-
 <style>
 </style>
