@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
+import VuexPersistence from 'vuex-persist'
+
 
 export const store = new Vuex.Store({
     state: {
@@ -29,5 +31,6 @@ export const store = new Vuex.Store({
         set_location : (state, newValue) => {
             state.location = newValue
         }
-    }
+    },
+    plugins: [new VuexPersistence().plugin],
 })
