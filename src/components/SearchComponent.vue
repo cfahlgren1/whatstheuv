@@ -24,7 +24,6 @@
                         dark
                         color="blue"
                 >
-            <v-toolbar-title>Location</v-toolbar-title>
             <v-autocomplete
                     v-model="select"
                     :loading="loading"
@@ -77,7 +76,6 @@
                 if (searchText.length >= 6) {
                     axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText + '.json?access_token=' + this.key + '&autocomplete=true&proximity=' + this.lng + '%2C' + this.lat + '&country=us', {}).then(response => {
                         response.data.features.forEach(x => this.locationResults.push( {"text" : x.place_name, "value": {"lng": x.geometry.coordinates[0], "lat": x.geometry.coordinates[1], "name" : x.text}}));
-                        console.log(response.data.features);
                     });
                     this.loading = false;
 
