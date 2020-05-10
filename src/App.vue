@@ -50,6 +50,13 @@
   import WindComponent from "./components/WindComponent";
   import VAnimateCss from 'v-animate-css';
   import VueMeta from 'vue-meta'
+  import Hotjar from 'vue-hotjar'
+
+  Vue.use(Hotjar, {
+    id: '1805114',
+    isProduction: true,
+    snippetVersion: 6
+  })
 
   Vue.use(VueMeta)
   Vue.use(VAnimateCss);
