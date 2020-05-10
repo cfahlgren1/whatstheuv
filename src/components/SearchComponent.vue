@@ -20,26 +20,26 @@
                 :opacity="1"
                 :value="overlay"
         >
-                <v-toolbar
-                        dark
-                        color="blue"
-                >
-            <v-autocomplete
-                    v-model="select"
-                    :loading="loading"
-                    :items="locationResults"
-                    :search-input.sync="search"
-                    class="mx-8"
-                    filled
-                    flat
-                    hide-no-data
-                    hide-details
-                    label="Search a location..."
-                    solo-inverted
-            ></v-autocomplete>
-            <v-btn icon @click="overlay = false">
-                <v-icon>mdi-close-thick</v-icon>
-            </v-btn>
+            <v-toolbar
+                    dark
+                    color="blue"
+            >
+                <v-autocomplete
+                        v-model="select"
+                        :loading="loading"
+                        :items="locationResults"
+                        :search-input.sync="search"
+                        class="mx-7"
+                        filled
+                        flat
+                        hide-no-data
+                        hide-details
+                        label="Search a location..."
+                        solo-inverted
+                ></v-autocomplete>
+                <v-btn icon @click="overlay = false">
+                    <v-icon>mdi-close-thick</v-icon>
+                </v-btn>
             </v-toolbar>
         </v-overlay>
     </div>
@@ -49,6 +49,9 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from "vue";
+    import vueDebounce from 'vue-debounce'
+
+    Vue.use(vueDebounce)
     Vue.use(VueAxios, axios)
 
     export default {
@@ -73,12 +76,12 @@
         methods: {
             querySelections (searchText) {
                 this.loading = true
+                this.locationResults = [];
                 if (searchText.length >= 6) {
-                    axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText + '.json?access_token=' + this.key + '&autocomplete=true&proximity=' + this.lng + '%2C' + this.lat + '&country=us', {}).then(response => {
+                    axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText + '.json?access_token=' + this.key + '&autocomplete=true&country=us', {}).then(response => {
                         response.data.features.forEach(x => this.locationResults.push( {"text" : x.place_name, "value": {"lng": x.geometry.coordinates[0], "lat": x.geometry.coordinates[1], "name" : x.text}}));
                     });
                     this.loading = false;
-
                 }
             },
             setLng(lng){

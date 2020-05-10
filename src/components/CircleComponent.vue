@@ -20,7 +20,7 @@
                         :labels="labels"
                         :gradient="['red', 'orange', 'yellow', 'green']"
                         color="#555555"
-                        line-width="6"
+                        line-width="7"
                         padding="16"
                         label-size="13"
                         auto-draw
@@ -37,7 +37,7 @@
                         :width="25"
                         :color="circle_color"
                 >
-                    <div v-if="!isNight()" class="display-2">{{ uv }}</div>
+                    <h1 v-if="!isNight()" class="display-2">{{ uv }}</h1>
                     <div v-else><v-icon :size="60">mdi-weather-night</v-icon></div>
                 </v-progress-circular>
             </div>
@@ -66,13 +66,13 @@
                 <v-card-title class="headline">UV Index Information</v-card-title>
 
                 <v-card-text>
-                <ul class="justify-left">
-                    <li><v-icon left color="green">mdi-circle</v-icon>0-2: Low</li>
-                    <li><v-icon left color="yellow">mdi-circle</v-icon>3-5: Moderate</li>
-                    <li><v-icon left color="orange">mdi-circle</v-icon>6-7: High</li>
-                    <li><v-icon left color="red">mdi-circle</v-icon>8-10: Very High</li>
-                    <li><v-icon left color="purple">mdi-circle</v-icon>11+: Extreme</li>
-                </ul>
+                    <ul class="justify-left">
+                        <li><v-icon left color="green">mdi-circle</v-icon>0-2: Low</li>
+                        <li><v-icon left color="yellow">mdi-circle</v-icon>3-5: Moderate</li>
+                        <li><v-icon left color="orange">mdi-circle</v-icon>6-7: High</li>
+                        <li><v-icon left color="red">mdi-circle</v-icon>8-10: Very High</li>
+                        <li><v-icon left color="purple">mdi-circle</v-icon>11+: Extreme</li>
+                    </ul>
                 </v-card-text>
 
                 <v-card-actions>
@@ -128,40 +128,39 @@
         methods :
             {
                 updateUV() {
-                    if (this.lat !== 0 && this.lng !== 0)
-                    {
-                        //Date of today for use in Get Request
-                        var d = new Date(Date.now());
-                        var n = d.toISOString();
 
-                        //Get current UV Data from OpenUV
-                        axios.get('https://api.openuv.io/api/v1/uv?lat=' + this.lat + '&lng=' + this.lng + '&dt=' + n, {
-                            params: {},
-                            headers: {'x-access-token': '65d941e9fdd0669b2f79c535acbf933b'}
-                        }).then(response => {
-                            this.info = response.data.result;
-                            this.uv = parseFloat(response.data.result['uv'].toFixed(1));
-                            this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
-                            this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
+                    //Date of today for use in Get Request
+                    var d = new Date(Date.now());
+                    var n = d.toISOString();
+
+                    //Get current UV Data from OpenUV
+                    axios.get('https://api.openuv.io/api/v1/uv?lat=' + this.lat + '&lng=' + this.lng + '&dt=' + n, {
+                        params: {},
+                        headers: {'x-access-token': '65d941e9fdd0669b2f79c535acbf933b'}
+                    }).then(response => {
+                        this.info = response.data.result;
+                        this.uv = parseFloat(response.data.result['uv'].toFixed(1));
+                        this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
+                        this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
+                    });
+                    var skip = true;
+                    //Get daily UV forecast from OpenUV
+                    axios.get('https://api.openuv.io/api/v1/forecast?lat=' + this.lat + '&lng=' + this.lng + '&dt=' + n, {
+                        params: {},
+                        headers: {'x-access-token': '65d941e9fdd0669b2f79c535acbf933b'}
+                    }).then(response => {
+                        this.data = [];
+                        this.labels =[];
+                        this.info = response.data.result;
+                        this.info.forEach(x => {
+                            if (skip) {
+                                this.data.push(parseInt(x.uv.toFixed(0)));
+                                this.labels.push(new Date(x.uv_time).getHours() > 12 ? new Date(x.uv_time).getHours() - 12 + "PM" : (new Date(x.uv_time).getHours() + "AM").replace('12AM', '12PM'));
+                            }
+                            skip = !skip;
                         });
-                        var skip = true;
-                        //Get daily UV forecast from OpenUV
-                        axios.get('https://api.openuv.io/api/v1/forecast?lat=' + this.lat + '&lng=' + this.lng + '&dt=' + n, {
-                            params: {},
-                            headers: {'x-access-token': '65d941e9fdd0669b2f79c535acbf933b'}
-                        }).then(response => {
-                            this.data = [];
-                            this.labels =[];
-                            this.info = response.data.result;
-                            this.info.forEach(x => {
-                                if (skip) {
-                                    this.data.push(parseInt(x.uv.toFixed(0)));
-                                    this.labels.push(new Date(x.uv_time).getHours() > 12 ? new Date(x.uv_time).getHours() - 12 + "PM" : new Date(x.uv_time).getHours() + "AM");
-                                }
-                                skip = !skip;
-                            });
-                        });
-                    }
+                    });
+
                 },
                 isNight(){
                     var d = new Date(Date.now());
@@ -169,7 +168,6 @@
                     var sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
                     if (d >=  sunset_time | d <= sunrise_time){
                         this.circle_color = "#5D5D5A";
-                        this.uv = this.uv_max;
                         return true;
                     }
                     this.circle_color = '#ffa45c';

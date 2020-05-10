@@ -6,8 +6,8 @@ import VuexPersistence from 'vuex-persist'
 
 export const store = new Vuex.Store({
     state: {
-        lng: 0,
-        lat: 0,
+        lng: -118.2437,
+        lat: 34.0522,
         location: '',
     },
     getters : {
