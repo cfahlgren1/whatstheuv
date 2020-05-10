@@ -93,7 +93,6 @@
       SunriseComponent,
       WindComponent,
     },
-    created(){},
     mounted() {
       if ('geolocation' in navigator) {
         // if user hasn't searched anywhere, get their location and update location store

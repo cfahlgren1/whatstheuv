@@ -78,7 +78,7 @@
                 this.loading = true
                 this.locationResults = [];
                 if (searchText.length >= 6) {
-                    axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText + '.json?access_token=' + this.key + '&autocomplete=true&country=us', {}).then(response => {
+                    axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchText + '.json?access_token=' + this.key + '&autocomplete=true', {}).then(response => {
                         response.data.features.forEach(x => this.locationResults.push( {"text" : x.place_name, "value": {"lng": x.geometry.coordinates[0], "lat": x.geometry.coordinates[1], "name" : x.text}}));
                     });
                     this.loading = false;
