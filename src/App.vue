@@ -88,15 +88,16 @@
     },
     created(){},
     mounted() {
-      // if user hasn't searched anywhere, get their location and update location store
-      this.$getLocation({enableHighAccuracy: false, timeout: Infinity, maximumAge: 0}).then(coordinates => {
-        this.setLng(coordinates.lng);
-        this.setLat(coordinates.lat);
-        axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
-          this.setLocation(response.data.address.city);
+      if ('geolocation' in navigator) {
+        // if user hasn't searched anywhere, get their location and update location store
+        this.$getLocation({enableHighAccuracy: false, timeout: Infinity, maximumAge: 0}).then(coordinates => {
+          this.setLng(coordinates.lng);
+          this.setLat(coordinates.lat);
+          axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
+            this.setLocation(response.data.address.city);
+          });
         });
-      });
-
+      }
       // if no location, get reverse geocode location from lng and lat
       if((this.location === '' || this.location === 'undefined')) {
         axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
