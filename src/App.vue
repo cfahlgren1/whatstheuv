@@ -49,8 +49,13 @@
   import SunriseComponent from "./components/SunriseComponent";
   import WindComponent from "./components/WindComponent";
   import VAnimateCss from 'v-animate-css';
-  import VueMeta from 'vue-meta'
-  import Hotjar from 'vue-hotjar'
+  import VueMeta from 'vue-meta';
+  import Hotjar from 'vue-hotjar';
+  import VueSegmentAnalytics from 'vue-segment-analytics';
+
+  Vue.use(VueSegmentAnalytics, {
+    id: 'IXhiZy7F8LW91CU2XFX6VcRHfKLvrJSL',
+  })
 
   Vue.use(Hotjar, {
     id: '1805114',
