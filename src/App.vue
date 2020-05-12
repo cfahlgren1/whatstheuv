@@ -1,5 +1,11 @@
 <template>
   <v-app>
+    <div>
+      <vue-headful
+              title="Current UV Index Forecast and Weather Data | The Weather Rocks"
+              description="Use WhatsTheUV to find the current UV Index forecast and other important weather information!"
+      />
+    </div>
     <v-content>
       <SearchComponent/>
       <h1 class="display-3 has-text-centered location-header">{{location}}</h1>
@@ -49,13 +55,8 @@
   import SunriseComponent from "./components/SunriseComponent";
   import WindComponent from "./components/WindComponent";
   import VAnimateCss from 'v-animate-css';
-  import VueMeta from 'vue-meta';
   import Hotjar from 'vue-hotjar';
-  import VueSegmentAnalytics from 'vue-segment-analytics';
-
-  Vue.use(VueSegmentAnalytics, {
-    id: 'IXhiZy7F8LW91CU2XFX6VcRHfKLvrJSL',
-  })
+  import vueHeadful from 'vue-headful';
 
   Vue.use(Hotjar, {
     id: '1805114',
@@ -63,7 +64,7 @@
     snippetVersion: 6
   })
 
-  Vue.use(VueMeta)
+  Vue.component('vue-headful', vueHeadful);
   Vue.use(VAnimateCss);
   Vue.use(Buefy)
   Vue.use(VueAxios, axios)
@@ -74,8 +75,8 @@
     data() {
       return {
         info: null,
-        title: 'Current UV Index Forecast and Weather Data | The Weather Rocks',
-        description: 'Use WeatherRocks to find the current UV Index forecast and other important weather information!',
+        title: 'Current UV Index Forecast and Weather Data | WhatsTheUV',
+        description: 'Use WhatsTheUV to find the current UV Index forecast and other important weather information!',
         wind_speed: 0,
         wind_angle: 0,
         sunset: "Waiting...",
@@ -176,6 +177,10 @@
           { vmid: 'description', name: 'description', content: this.description }
         ]
       }
+    },
+    created(){
+      document.title = this.title
+      document.head.querySelector('meta[name=description]').content = this.description
     }
   }
 </script>
