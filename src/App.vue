@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <title>The Title</title>
     <div>
       <vue-headful
               title="Current UV Index Forecast and Weather Data | The Weather Rocks"
@@ -56,7 +57,12 @@
   import WindComponent from "./components/WindComponent";
   import VAnimateCss from 'v-animate-css';
   import Hotjar from 'vue-hotjar';
-  import vueHeadful from 'vue-headful';
+  import VueMeta from 'vue-meta'
+
+  Vue.use(VueMeta, {
+    // optional pluginOptions
+    refreshOnceOnNavigation: true
+  })
 
   Vue.use(Hotjar, {
     id: '1805114',
@@ -64,7 +70,6 @@
     snippetVersion: 6
   })
 
-  Vue.component('vue-headful', vueHeadful);
   Vue.use(VAnimateCss);
   Vue.use(Buefy)
   Vue.use(VueAxios, axios)
@@ -180,7 +185,6 @@
     },
     created(){
       document.title = this.title
-      document.head.querySelector('meta[name=description]').content = this.description
     }
   }
 </script>
