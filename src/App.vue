@@ -1,17 +1,10 @@
 <template>
   <v-app>
-    <title>The Title</title>
-    <div>
-      <vue-headful
-              title="Current UV Index Forecast and Weather Data | The Weather Rocks"
-              description="Use WhatsTheUV to find the current UV Index forecast and other important weather information!"
-      />
-    </div>
     <v-content>
       <SearchComponent/>
       <h1 class="display-3 has-text-centered location-header">{{location}}</h1>
       <br>
-      <h1 v-animate-css="'bounceInUp'" class="display-4 has-text-centered"><b>{{current_temp}}</b></h1>
+      <h1 id="currentTemp" v-animate-css="'bounceInUp'" v-on:click="toggle_units" class="display-4 has-text-centered"><b>{{current_temp}}</b></h1>
       <h1 class="display-1 has-text-centered has-text-grey-light"><b>"{{forecast}}"</b></h1>
       <br>
       <v-container fluid>
@@ -95,6 +88,7 @@
         locationiq_key : '83fb9d3ee4efa1',
         address: '',
         city:'',
+        country_code:'',
         location_permission: false,
       }
     },
@@ -112,6 +106,9 @@
           this.setLat(coordinates.lat);
           axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
             this.setLocation(response.data.address.city);
+            if (response.data.address.country_code !== "us" && this.metric === false){
+              this.toggle_units();
+            }
           });
         });
       }
@@ -119,9 +116,11 @@
       if((this.location === '' || this.location === 'undefined')) {
         axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
           this.setLocation(response.data.address.city);
+          if (response.data.address.country_code !== "us" && this.metric === false){
+            this.toggle_units();
+          }
         });
       }
-
       this.updateUV();
     },
     methods :
@@ -142,6 +141,17 @@
                 this.$store.commit('set_location', location);
                 console.log('Location changed to ' + location);
               },
+              toggle_units(){
+                this.$store.commit('toggle_units'); // toggle units boolean
+                if (this.current_temp.endsWith('°F') && this.metric === true) { //check if temp is farenheit and metric is celsius
+                  this.current_temp = ((parseInt(this.current_temp.substring(0, this.current_temp.length - 2)) - 32) * (5/9)).toFixed(0) + '°C';
+                  this.wind_speed = parseFloat(this.wind_speed / 2.237).toFixed(2);
+                }
+                else{ // metric is true
+                  this.current_temp = ((parseInt(this.current_temp.substring(0, this.current_temp.length - 2)) * (9/5)) + 32).toFixed(0) + '°F';
+                  this.wind_speed = parseFloat((this.wind_speed * 2.237).toFixed(2));
+                }
+              },
               //update all information
               updateUV() {
                 axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + this.lat + '&lon=' + this.lng + '&exclude=hourly&appid=' + this.key + '&units=imperial', {
@@ -152,10 +162,16 @@
                   this.sunrise = this.getLocalTime(this.sunrise_time);
                   this.sunset_time = response.data.current.sunset;
                   this.sunset = this.getLocalTime(this.sunset_time);
-                  this.wind_speed = response.data.current.wind_speed;
                   this.wind_angle = response.data.current.wind_deg;
                   this.forecast = response.data.current.weather[0].description;
-                  this.current_temp = response.data.current.temp.toFixed(0) + '°F';
+                  if (this.metric) { // check if units are imperial or metric
+                    this.current_temp = ((response.data.current.temp - 32) * (5/9)).toFixed(0) + '°C'; // convert farenheit to celsius
+                    this.wind_speed = parseFloat((response.data.current.wind_speed / 2.237).toFixed(2));
+                  }
+                  else{
+                    this.current_temp = response.data.current.temp.toFixed(0) + '°F';
+                    this.wind_speed = parseFloat(response.data.current.wind_speed.toFixed(2));
+                  }
                 });
               }
             },
@@ -168,12 +184,15 @@
       },
       location: function(){
         return this.$store.state.location;
-      }
+      },
+      metric: function(){
+        return this.$store.state.metric;
+      },
     },
     watch:{
       lng(){
         this.updateUV();
-      }
+      },
     },
     metaInfo () { //meta info for SEO
       return {
@@ -207,5 +226,8 @@
   {
     margin-left: 1em;
     font-weight: bold;
+  }
+  #currentTemp:hover {
+    cursor: pointer;
   }
 </style>

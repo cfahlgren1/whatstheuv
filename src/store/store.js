@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
         lng: -118.2437,
         lat: 34.0522,
         location: '',
+        metric: false,
     },
     getters : {
         lng: (state) => {
@@ -19,7 +20,10 @@ export const store = new Vuex.Store({
         },
         location: (state) => {
             return state.location
-        }
+        },
+        metric: (state) => {
+            return state.metric
+        },
     },
     mutations: {
         set_lng : (state, newValue) => {
@@ -30,7 +34,11 @@ export const store = new Vuex.Store({
         },
         set_location : (state, newValue) => {
             state.location = newValue
+        },
+        toggle_units : (state) => {
+            state.metric = !state.metric
         }
+
     },
     plugins: [new VuexPersistence().plugin],
 })

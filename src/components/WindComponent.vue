@@ -9,7 +9,7 @@
         </v-card-title>
         <br>
             <v-card-subtitle class="display-2">
-                <b>{{speed}}</b>  mph
+                <b>{{speed}}</b> {{units}}
             </v-card-subtitle>
             <v-card-title class="heading ma-3" align="left">
                 <v-icon x-medium left :color="color">mdi-compass</v-icon>
@@ -53,6 +53,17 @@
                                         : (offsetAngle >= 6 * degreePerDirection && offsetAngle < 7 * degreePerDirection) ? "W"
                                             : "NW";
             }
+        },
+        computed : {
+            metric: function(){
+                return this.$store.state.metric;
+            },
+            units: function(){
+                if (this.metric){
+                    return "m/s";
+                }
+                return "mph";
+            },
         }
     }
 </script>
