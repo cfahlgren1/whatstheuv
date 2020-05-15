@@ -73,8 +73,8 @@
     data() {
       return {
         info: null,
-        title: 'Current UV Index Forecast and Weather Data | WhatsTheUV',
-        description: 'Use WhatsTheUV to find the current UV Index forecast and other important weather information!',
+        title: 'Current UV Index Forecast and Weather Info | WhatsTheUV',
+        description: 'Find the local UV Index forecast and other important weather information at WhatsTheUV!',
         wind_speed: 0,
         wind_angle: 0,
         sunset: "Waiting...",
@@ -88,6 +88,7 @@
         locationiq_key : '83fb9d3ee4efa1',
         address: '',
         city:'',
+        village:'',
         country_code:'',
         location_permission: false,
       }
@@ -105,20 +106,19 @@
           this.setLng(coordinates.lng);
           this.setLat(coordinates.lat);
           axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
-            this.setLocation(response.data.address.city);
-            if (response.data.address.country_code !== "us" && this.metric === false){
+            if (typeof response.data.address.city !== 'undefined'){ // if city value is available set location to city
+              this.setLocation(response.data.address.city);
+            }
+            else if (typeof response.data.address.village !== 'undefined'){ // if village value is available set location to village
+              this.setLocation(response.data.address.village);
+            }
+            else{  // if state value is available set location to state
+              this.setLocation(response.data.address.state);
+            }
+            if (response.data.address.country_code !== "us" && this.metric === false){ // if user is located outside of the us, toggle units to metric
               this.toggle_units();
             }
           });
-        });
-      }
-      // if no location, get reverse geocode location from lng and lat
-      if((this.location === '' || this.location === 'undefined')) {
-        axios.get('https://us1.locationiq.com/v1/reverse.php?key=' + this.locationiq_key + '&lat=' + this.lat + '&lon=' + this.lng + '&format=json', {}).then(response => {
-          this.setLocation(response.data.address.city);
-          if (response.data.address.country_code !== "us" && this.metric === false){
-            this.toggle_units();
-          }
         });
       }
       this.updateUV();
@@ -145,7 +145,7 @@
                 this.$store.commit('toggle_units'); // toggle units boolean
                 if (this.current_temp.endsWith('°F') && this.metric === true) { //check if temp is farenheit and metric is celsius
                   this.current_temp = ((parseInt(this.current_temp.substring(0, this.current_temp.length - 2)) - 32) * (5/9)).toFixed(0) + '°C';
-                  this.wind_speed = parseFloat(this.wind_speed / 2.237).toFixed(2);
+                  this.wind_speed = parseFloat((this.wind_speed / 2.237).toFixed(2));
                 }
                 else{ // metric is true
                   this.current_temp = ((parseInt(this.current_temp.substring(0, this.current_temp.length - 2)) * (9/5)) + 32).toFixed(0) + '°F';

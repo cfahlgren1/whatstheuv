@@ -37,8 +37,7 @@ export const store = new Vuex.Store({
         },
         toggle_units : (state) => {
             state.metric = !state.metric
-        }
-
+        },
     },
     plugins: [new VuexPersistence().plugin],
 })
