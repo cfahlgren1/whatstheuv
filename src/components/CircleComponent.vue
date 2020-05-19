@@ -154,9 +154,7 @@
                         this.uv = parseFloat(response.data.result['uv'].toFixed(1));
                         this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
                         this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
-                        console.log(this.uv)
                         this.setAdjustedUV() // adjust the uv according to cloud cover
-                        console.log(this.uv)
                     });
                     var skip = true;
                     //Get daily UV forecast from OpenUV
@@ -189,13 +187,9 @@
                     return false;
                 },
                 setAdjustedUV(){
-                    if (this.cloud_percent >= 0.7 && this.cloud_percent < 0.9) {
-                        this.uv_max = (this.uv_max * 0.95).toFixed(1);
-                        this.uv = (this.uv * 0.95).toFixed(1);
-                    }
-                    else if (this.cloud_percent >= 0.9) {
-                        this.uv_max = (this.uv * 0.80).toFixed(1);
-                        this.uv = (this.uv * 0.80).toFixed(1);
+                    if (this.cloud_percent >= 0.6 && this.cloud_percent < 0.9) {
+                        this.uv_max = (this.uv_max * 0.87).toFixed(1);
+                        this.uv = (this.uv * 0.87).toFixed(1);
                     }
                 }
             },
