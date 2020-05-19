@@ -15,17 +15,28 @@
                     max-width="calc(100% - 32px)"
             >
                 <h1 style="margin-bottom: 1em; font-weight: bold;">Forecast</h1>
-                <v-sparkline
+                <v-sparkline v-if="uv_max >= 11"
                         :value="data"
                         :labels="labels"
-                        :gradient="['red', 'orange', 'yellow', 'green']"
+                        :gradient="['purple', 'red', 'orange', 'yellow', 'green']"
                         color="#555555"
                         line-width="7"
                         padding="16"
                         label-size="13"
-                        auto-draw
+                        auto-drawn
                         smooth
-                ></v-sparkline>
+                />
+                <v-sparkline v-else
+                             :value="data"
+                             :labels="labels"
+                             :gradient="['red', 'orange', 'yellow', 'green']"
+                             color="#555555"
+                             line-width="7"
+                             padding="16"
+                             label-size="13"
+                             auto-draw
+                             smooth
+                />
             </v-sheet>
             <div justify="center" align="center" class="text-center ma-12">
                 <h1 style="margin-bottom: 1em; font-weight: bold;">Current</h1>
@@ -186,11 +197,7 @@
             },
         },
         watch: {
-            lng(newValue, oldValue){
-                console.log('Updating from ' + oldValue + ' to ' + newValue);
-            },
-            lat(newValue, oldValue){
-                console.log('Updating from ' + oldValue + ' to ' + newValue);
+            lat(){
                 this.updateUV();
             }
         },

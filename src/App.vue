@@ -139,7 +139,6 @@
               },
               setLocation(location){
                 this.$store.commit('set_location', location);
-                console.log('Location changed to ' + location);
               },
               toggle_units(){
                 this.$store.commit('toggle_units'); // toggle units boolean
