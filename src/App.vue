@@ -166,7 +166,7 @@
                   this.sunset = this.getLocalTime(this.sunset_time);
                   this.wind_angle = response.data.current.wind_deg;
                   this.forecast = response.data.current.weather[0].description;
-                  this.cloud_percent = response.data.current.clouds * 0.01;
+                  this.cloud_percent = response.data.daily[0].clouds * 0.01
                   if (this.metric) { // check if units are imperial or metric
                     this.current_temp = ((response.data.current.temp - 32) * (5/9)).toFixed(0) + '°C'; // convert farenheit to celsius
                     this.wind_speed = parseFloat((response.data.current.wind_speed / 2.237).toFixed(2));
