@@ -190,7 +190,7 @@
                 },
                 setAdjustedUV(){
                     if (this.cloud_percent >= 0.7 && this.cloud_percent < 0.9) {
-                        this.uv_max = (this.uv_max * 0.79).toFixed(1);
+                        this.uv_max = (this.uv_max * 0.95).toFixed(1);
                         this.uv = (this.uv * 0.95).toFixed(1);
                     }
                     else if (this.cloud_percent >= 0.9) {
