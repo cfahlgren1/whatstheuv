@@ -135,6 +135,7 @@
         props: {
             sunset: Number,
             sunrise: Number,
+            cloud_percent: Number,
         },
         methods :
             {
@@ -153,6 +154,7 @@
                         this.uv = parseFloat(response.data.result['uv'].toFixed(1));
                         this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
                         this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
+                        this.setAdjustedUV() // adjust the uv according to cloud cover
                     });
                     var skip = true;
                     //Get daily UV forecast from OpenUV
@@ -184,17 +186,27 @@
                     this.circle_color = '#ffa45c';
                     return false;
                 },
+                setAdjustedUV(){
+                    if (this.cloud_percent >= 0.2 && this.cloud_percent < 0.7){
+                        this.uv_max = (this.uv_max * 0.89).toFixed(1);
+                        this.uv = (this.uv * 0.89).toFixed(1);
+                    }
+                    else if (this.cloud_percent >= 0.7 && this.cloud_percent < 0.9) {
+                        this.uv_max = (this.uv_max * 0.79).toFixed(1);
+                        this.uv = (this.uv * 0.79).toFixed(1);
+                    }
+                    else if (this.cloud_percent >= 0.9) {
+                        this.uv_max *= 0.31;
+                        this.uv = (this.uv * 0.31).toFixed(1);
+                    }
+                }
             },
         mounted() {
             this.updateUV()
         },
         computed: {
-            lng : function(){
-                return this.$store.state.lng;
-            },
-            lat: function(){
-                return this.$store.state.lat;
-            },
+            lng : function(){ return this.$store.state.lng},
+            lat : function(){ return this.$store.state.lat},
         },
         watch: {
             lat(){
