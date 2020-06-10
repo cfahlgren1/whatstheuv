@@ -187,14 +187,19 @@
                     return false;
                 },
                 setAdjustedUV(){
-                    if (this.cloud_percent >= 0.4) {
+                    if (this.cloud_percent >= 0.4 && this.cloud_percent < 0.75) {
                         this.uv_max = (this.uv_max * 0.87).toFixed(1);
                         this.uv = (this.uv * 0.87).toFixed(1);
+                    }
+                    else if(this.cloud_percent >= 0.75){
+                        this.uv_max = (this.uv_max * 0.60).toFixed(1);
+                        this.uv = (this.uv * 0.60).toFixed(1);
                     }
                 }
             },
         mounted() {
             this.updateUV()
+            console.log(this.cloud_percent)
         },
         computed: {
             lng : function(){ return this.$store.state.lng},

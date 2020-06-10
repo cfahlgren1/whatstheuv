@@ -35,6 +35,7 @@
         </sequential-entrance>
       </v-container>
     </v-content>
+    <Footer/>
   </v-app>
 </template>
 
@@ -49,6 +50,7 @@
   import SearchComponent from "./components/SearchComponent";
   import SunriseComponent from "./components/SunriseComponent";
   import WindComponent from "./components/WindComponent";
+  import Footer from "./components/Footer";
   import VAnimateCss from 'v-animate-css';
   import Hotjar from 'vue-hotjar';
   import VueMeta from 'vue-meta'
@@ -101,6 +103,7 @@
       SearchComponent,
       SunriseComponent,
       WindComponent,
+      Footer,
     },
     mounted() {
       if ('geolocation' in navigator) {
