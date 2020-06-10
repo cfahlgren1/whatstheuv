@@ -185,7 +185,7 @@
                     if (d >= max_uv_time){
                         this.after = true;
                     }
-                    if (d >=  sunset_time | d <= sunrise_time){
+                    if (d >=  sunset_time || d <= sunrise_time){
                         this.circle_color = "#5D5D5A";
                         return true;
                     }

@@ -25,6 +25,7 @@
         },
         props: {
             weather: String,
+            night: Boolean,
         },
         components: {
             'lottie': Lottie
@@ -65,6 +66,10 @@
             }
             else if(this.weather === 'Mist'){
                 this.url = 'https://gist.githubusercontent.com/cfahlgren1/a71c4c36b5b9d65054465f182029c91e/raw/361459446fcb1367383a50057ab7781cb6f8ddf1/Mist'
+            }
+
+            if (this.night){
+                this.url = 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/night-weather/night-weather.json'
             }
             axios.get(this.url).then(response => {
                this.defaultOptions.animationData = response.data;

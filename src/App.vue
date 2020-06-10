@@ -7,7 +7,8 @@
                 <WeatherAnimation
                         v-animate-css="'bounceInDown'"
                         v-if="forecast !== 'Waiting...'"
-                        :weather="forecast"/>
+                        :weather="forecast"
+                        :night="isNight"/>
                 <h1 v-animate-css="'bounceInDown'" id="currentTemp" v-on:click="toggle_units" class="display-3 has-text-centered">
                     <b>{{current_temp}}</b></h1>
             <v-container fluid>
@@ -179,7 +180,7 @@
                             this.wind_speed = parseFloat(response.data.current.wind_speed.toFixed(2));
                         }
                     });
-                }
+                },
             },
         computed: {
             lng: function () {
@@ -193,6 +194,15 @@
             },
             metric: function () {
                 return this.$store.state.metric;
+            },
+            isNight(){
+                const d = new Date(Date.now());
+                const sunset_time = new Date(this.sunset * 1000);
+                const sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
+                if (d >=  sunset_time || d <= sunrise_time){
+                    return true;
+                }
+                return false;
             },
         },
         watch: {
