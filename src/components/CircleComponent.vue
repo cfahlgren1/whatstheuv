@@ -165,6 +165,7 @@
                         this.data = [];
                         this.labels =[];
                         this.info = response.data.result;
+                        console.log(this.info);
                         this.info.forEach(x => {
                             if (skip) {
                                 this.data.push(parseInt(x.uv.toFixed(0)));
@@ -199,7 +200,6 @@
             },
         mounted() {
             this.updateUV()
-            console.log(this.cloud_percent)
         },
         computed: {
             lng : function(){ return this.$store.state.lng},
