@@ -11,7 +11,7 @@
                     class="text-center"
                     cols="12"
             >
-                <p>Copyright {{ new Date().getFullYear() }} - <strong>WhatsTheUV</strong> - Built from the creators of <a href="https://bouncemap.com"> Bounce </a><p/>
+                <p>Copyright {{ new Date().getFullYear() }} - <strong>WhatsTheUV</strong> - Built from the creators of <a href="https://bouncemap.com"> <strong>Bounce</strong></a><p/>
             </v-col>
         </v-footer>
     </v-card>

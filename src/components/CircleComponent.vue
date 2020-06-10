@@ -53,6 +53,7 @@
                 </v-progress-circular>
             </div>
             <v-chip
+                    v-if="!after"
                     class="ma-2"
                     color="blue"
                     text-color="white"
@@ -129,6 +130,7 @@
                 dialog: false,  // variable for modal
                 data: [],   // uv data for vuetify sparkline
                 labels: [], // labels for vuetify sparkline
+                after: false,
             }
         },
         components: {},
@@ -165,7 +167,6 @@
                         this.data = [];
                         this.labels =[];
                         this.info = response.data.result;
-                        console.log(this.info);
                         this.info.forEach(x => {
                             if (skip) {
                                 this.data.push(parseInt(x.uv.toFixed(0)));
@@ -177,9 +178,13 @@
 
                 },
                 isNight(){
-                    var d = new Date(Date.now());
-                    var sunset_time = new Date(this.sunset * 1000);
-                    var sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
+                    const d = new Date(Date.now());
+                    const max_uv_time = new Date(this.max_uv_time * 1000);
+                    const sunset_time = new Date(this.sunset * 1000);
+                    const sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
+                    if (d >= max_uv_time){
+                        this.after = true;
+                    }
                     if (d >=  sunset_time | d <= sunrise_time){
                         this.circle_color = "#5D5D5A";
                         return true;
