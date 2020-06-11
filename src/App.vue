@@ -197,8 +197,8 @@
             },
             isNight(){
                 const d = new Date(Date.now());
-                const sunset_time = new Date(this.sunset_time);
-                const sunrise_time = new Date(this.sunrise_time); // Convert from UNIX UTC Time to Date Object
+                const sunset_time = new Date(this.sunset_time * 1000);
+                const sunrise_time = new Date(this.sunrise_time * 1000); // Convert from UNIX UTC Time to Date Object
                 if (d >=  sunset_time || d <= sunrise_time){
                     return true;
                 }

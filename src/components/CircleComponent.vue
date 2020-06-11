@@ -123,6 +123,7 @@
                 max_uv_time: null,
                 uv_time: null,
                 info : null,
+                max_time: null,
                 uv_max: 0,
                 uv: 0,
                 diameter: 180,
@@ -154,6 +155,7 @@
                     }).then(response => {
                         this.info = response.data.result;
                         this.uv = parseFloat(response.data.result['uv'].toFixed(1));
+                        this.max_time = response.data.result['uv_max_time']
                         this.uv_max = parseFloat(response.data.result['uv_max'].toFixed(1));
                         this.max_uv_time = new Date(response.data.result['uv_max_time']).toLocaleTimeString('en-US').replace(/(.*)\D\d+/, '$1');
                         this.setAdjustedUV() // adjust the uv according to cloud cover
@@ -179,11 +181,16 @@
                 },
                 isNight(){
                     const d = new Date(Date.now());
-                    const max_uv_time = new Date(this.max_uv_time * 1000);
-                    const sunset_time = new Date(this.sunset * 1000);
-                    const sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
+                    const max_uv_time = new Date(this.max_time);
+                    const sunset_time = new Date(this.sunset_time * 1000);
+                    const sunrise_time = new Date(this.sunrise_time * 1000); // Convert from UNIX UTC Time to Date Object
+                    console.log(d);
+                    console.log(max_uv_time);
                     if (d >= max_uv_time){
                         this.after = true;
+                    }
+                    else{
+                        this.after = false;
                     }
                     if (d >=  sunset_time || d <= sunrise_time){
                         this.circle_color = "#5D5D5A";
