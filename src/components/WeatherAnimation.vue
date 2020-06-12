@@ -1,6 +1,6 @@
 <template>
     <div class="WeatherAnimation">
-        <lottie v-if="rendered" :options="defaultOptions" :height="250" :width="250" v-on:animCreated="handleAnimation"/>
+        <lottie v-if="rendered" :options="defaultOptions" :height="150" :width="150" v-on:animCreated="handleAnimation"/>
     </div>
 </template>
 

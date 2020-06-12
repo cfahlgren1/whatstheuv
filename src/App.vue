@@ -2,15 +2,24 @@
     <v-app>
         <v-content>
             <SearchComponent/>
-            <h1 class="display-3 has-text-centered location-header">{{location}}</h1>
+            <h1 class="display-2 has-text-centered location-header">{{location}}</h1>
             <br>
-                <WeatherAnimation
-                        v-animate-css="'bounceInDown'"
-                        v-if="forecast !== 'Waiting...'"
-                        :weather="forecast"
-                        :night="isNight"/>
-                <h1 v-animate-css="'bounceInDown'" id="currentTemp" v-on:click="toggle_units" class="display-3 has-text-centered">
-                    <b>{{current_temp}}</b></h1>
+            <v-container fluid>
+                <v-row align="center"
+                       justify="center">
+                    <v-col>
+                        <h1 v-animate-css="'bounceInDown'" id="currentTemp" v-on:click="toggle_units" class="display-4 has-text-centered">
+                            <b>{{current_temp}}</b>
+                        </h1>
+                    </v-col>
+                    <v-col>
+                        <WeatherAnimation
+                            v-animate-css="'bounceInDown'"
+                            v-if="forecast !== 'Waiting...'"
+                            :weather="forecast"
+                            :night="isNight"/></v-col>
+                </v-row>
+            </v-container>
             <v-container fluid>
                 <sequential-entrance fromTop>
                     <h1 class="forecast-header display-1 has-text-left">Today's Highlights</h1>

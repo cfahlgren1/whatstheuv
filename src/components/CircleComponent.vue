@@ -8,6 +8,21 @@
             <v-card-title primary-title class="headline justify-left">
                 UV Index <v-btn class="justify-right" @click.stop="dialog=true" icon color="gray"><v-icon>mdi-information-outline</v-icon></v-btn>
             </v-card-title>
+            <div justify="center" align="center" class="text-center ma-4">
+                <h1 style="margin-bottom: 1em; font-weight: bold;">Current</h1>
+                <v-progress-circular
+                        :indeterminate="indeterminate"
+                        :rotate="0"
+                        :size="diameter"
+                        :value="((uv/uv_max)*100)"
+                        :width="25"
+                        :color="circle_color"
+                >
+                    <h1 v-if="!isNight()" class="display-2">{{ uv }}</h1>
+                    <div v-else><v-icon :size="60">mdi-weather-night</v-icon></div>
+                </v-progress-circular>
+            </div>
+            <br>
             <v-sheet
                     class="v-sheet--offset mx-auto"
                     color="white"
@@ -38,20 +53,7 @@
                              smooth
                 />
             </v-sheet>
-            <div justify="center" align="center" class="text-center ma-12">
-                <h1 style="margin-bottom: 1em; font-weight: bold;">Current</h1>
-                <v-progress-circular
-                        :indeterminate="indeterminate"
-                        :rotate="0"
-                        :size="diameter"
-                        :value="((uv/uv_max)*100)"
-                        :width="25"
-                        :color="circle_color"
-                >
-                    <h1 v-if="!isNight()" class="display-2">{{ uv }}</h1>
-                    <div v-else><v-icon :size="60">mdi-weather-night</v-icon></div>
-                </v-progress-circular>
-            </div>
+            <br>
             <v-chip
                     v-if="!after"
                     class="ma-2"
