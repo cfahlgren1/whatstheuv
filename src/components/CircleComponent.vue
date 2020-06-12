@@ -177,15 +177,12 @@
                             skip = !skip;
                         });
                     });
-
                 },
                 isNight(){
                     const d = new Date(Date.now());
                     const max_uv_time = new Date(this.max_time);
-                    const sunset_time = new Date(this.sunset_time * 1000);
-                    const sunrise_time = new Date(this.sunrise_time * 1000); // Convert from UNIX UTC Time to Date Object
-                    console.log(d);
-                    console.log(max_uv_time);
+                    const sunset_time = new Date(this.sunset * 1000);
+                    const sunrise_time = new Date(this.sunrise * 1000); // Convert from UNIX UTC Time to Date Object
                     if (d >= max_uv_time){
                         this.after = true;
                     }

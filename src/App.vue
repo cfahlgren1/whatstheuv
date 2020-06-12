@@ -179,7 +179,7 @@
                             this.current_temp = response.data.current.temp.toFixed(0) + '°F';
                             this.wind_speed = parseFloat(response.data.current.wind_speed.toFixed(2));
                         }
-                    });
+                    })
                 },
             },
         computed: {
